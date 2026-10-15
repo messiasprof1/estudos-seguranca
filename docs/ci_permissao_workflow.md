@@ -1,55 +1,20 @@
-# Como ativar o CI (GitHub Actions)
+# CI (GitHub Actions)
 
-O GitHub não deixa apps de terceiros criarem arquivos em `.github/workflows/` sem uma permissão
-especial (`workflows`). Quem define essa permissão é o desenvolvedor do app, não o usuário.
-Por isso, quem cria o arquivo é o dono do repositório, direto pelo site do GitHub.
-
-## Passo a passo (pelo navegador)
-
-1. Abra o repositório no GitHub → **Add file** → **Create new file**.
-2. No nome do arquivo, digite exatamente: `.github/workflows/ci.yml`
-   (ao digitar `/`, o GitHub cria as pastas sozinho).
-3. Cole o conteúdo abaixo.
-4. Clique em **Commit changes...** → **Commit directly to the main branch** → **Commit changes**.
-5. Vá na aba **Actions**: a execução "CI" aparece em alguns segundos e deve terminar com ✅.
-
-```yaml
-name: CI
-
-on:
-  push:
-  pull_request:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    env:
-      MODO_MOCK: "true"
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Instalar dependências
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Ruff
-        run: ruff check .
-      - name: Pytest
-        run: pytest -q
-      - name: Avaliação mock
-        run: python eval.py
-```
-
-## O que este CI faz
+O workflow `.github/workflows/ci.yml` está ativo e roda a cada push e pull request:
 
 - **Ruff**: verifica estilo e erros comuns no código.
 - **Pytest**: roda os testes (Porteiro, Hook, RAG, HITL, API, MCP) em modo mock, sem chave de API.
 - **eval.py**: roda o benchmark com as 60 mensagens, para garantir que a avaliação continua funcionando.
 
-## Badge para o README (opcional)
+## Por que o arquivo foi criado manualmente
 
-```markdown
-![CI](https://prod-assets.cosmic.aws.dev/a/3BrhofxVVRtSU7aVMEccdgkpI3I/imag.webp)
-```
+O GitHub não deixa apps de terceiros criarem ou alterarem arquivos em `.github/workflows/` sem a
+permissão `workflows`, que é definida pelo desenvolvedor do app (não pelo usuário). Por isso o
+arquivo foi criado pelo dono do repositório, pelo site do GitHub. Alterações futuras nesse arquivo
+também precisam ser feitas por esse caminho.
+
+## Lições do processo
+
+- O arquivo de workflow deve conter **apenas YAML** (primeira linha `name: CI`). Texto extra quebra o parse.
+- Para editar pelo site, abra o arquivo na branch `main` (não num commit específico), senão o lápis não aparece.
+- A tradução automática do navegador altera o texto exibido; desative-a no GitHub ao conferir código.

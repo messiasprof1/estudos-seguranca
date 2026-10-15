@@ -1,5 +1,8 @@
 # Porteiro & Ecossistema de IA Agêntica (Zero-Framework)
 
+[![CI](https://github.com/messiasprof1/estudos-seguranca/actions/workflows/ci.yml/badge.svg)](https://github.com/messiasprof1/estudos-seguranca/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+
 Repositório técnico em **Python puro** com integração real dos módulos: Porteiro, Roteador, Confiança por margem, HITL persistente, RAG offline, hook seguro e avaliação comparativa.
 
 ## Objetivo
