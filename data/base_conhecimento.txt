@@ -1,0 +1,8 @@
+Financeiro: boletos podem ser emitidos na aba Pagamentos > 2a via.
+Financeiro: reembolsos exigem número da fatura e motivo da contestação.
+Suporte: erro 500 deve incluir timestamp, request id e print da tela.
+Suporte: problemas de login podem envolver reset de senha e checagem de SSO.
+Comercial: plano Enterprise inclui SLA dedicado e suporte prioritário.
+Segurança: toda execução de comando passa por allowlist e aprovação contextual.
+HITL: solicitações com confiança baixa são enfileiradas para analista humano.
+RAG: o índice é pré-computado e carregado localmente em cada execução.

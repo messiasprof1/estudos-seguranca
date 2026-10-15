@@ -1,0 +1,4 @@
+sistema,acuracia,macro_f1,latencia_p50,latencia_p95,custo_medio
+porteiro,0.6167,0.6564,0.013,0.036,0.00000938
+llm_puro,0.5833,0.6101,0.005,0.007,0.00000938
+regex_puro,0.5667,0.6239,0.007,0.010,0.00000938
