@@ -1,20 +1,3 @@
-Como ativar o CI (GitHub Actions)
-O GitHub não deixa apps de terceiros criarem arquivos em .github/workflows/ sem uma permissão
-especial (workflows). Quem define essa permissão é o desenvolvedor do app, não o usuário.
-Por isso, quem cria o arquivo é o dono do repositório, direto pelo site do GitHub.
-
-Passo a passo (pelo navegador)
-Abra o repositório no GitHub → Add file → Create new file.
-
-No nome do arquivo, digite exatamente: .github/workflows/ci.yml
-(ao digitar /, o GitHub cria as pastas sozinho).
-
-Cole o conteúdo abaixo.
-
-Clique em Commit changes... → Commit directly to the main branch → Commit changes.
-
-Vá na aba Actions: a execução "CI" aparece em alguns segundos e deve terminar com ✅.
-
 name: CI
 
 on:
@@ -41,12 +24,3 @@ jobs:
         run: pytest -q
       - name: Avaliação mock
         run: python eval.py
-O que este CI faz
-Ruff: verifica estilo e erros comuns no código.
-
-Pytest: roda os testes (Porteiro, Hook, RAG, HITL, API, MCP) em modo mock, sem chave de API.
-
-eval.py: roda o benchmark com as 60 mensagens, para garantir que a avaliação continua funcionando.
-
-Badge para o README (opcional)
-![CI](https://prod-assets.cosmic.aws.dev/a/3BrhofxVVRtSU7aVMEccdgkpI3I/imag.webp)
