@@ -12,3 +12,5 @@ venv/
 *.log
 .DS_Store
 resultados_local/
+.envrc
+*.pid

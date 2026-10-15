@@ -12,12 +12,16 @@ Demonstrar arquitetura de IA agêntica com foco em segurança, previsibilidade e
 - `pydantic`
 - `numpy`
 - `python-dotenv`
+- `fastapi` + `uvicorn`
+- `mcp` (SDK oficial para servidor MCP em stdio)
 - `pytest`
 - `sentence-transformers` (**opcional**, apenas para reranker cross-encoder)
 
 ## Estrutura
 
 ```text
+api/
+  main.py
 core/
   porteiro.py
   roteador.py
@@ -29,10 +33,15 @@ core/
   cliente_llm.py
   mock_provider.py
   custo.py
+mcp_server/
+  server.py
+  config_exemplos.md
 docs/
   architecture.md
   security.md
   decisions.md
+  api_usage.md
+  mcp.md
 tests/
   ...
 dataset.py
@@ -64,6 +73,89 @@ python main.py
 ```
 
 > Por padrão, o projeto roda em **modo mock determinístico** quando não há chave (`MODO_MOCK=auto` sem `OPENAI_API_KEY`).
+
+## 🛰️ API FastAPI (deploy via Docker)
+
+### Subir local com Python
+
+```bash
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+
+Acesse:
+- Health: `GET http://localhost:8000/health`
+- Docs Swagger: `http://localhost:8000/docs`
+
+### Subir com Docker Compose
+
+```bash
+docker compose up --build
+```
+
+- Porta exposta: `8000`
+- Persistência da fila HITL: volume `./data:/app/data`
+
+### Curls rápidos
+
+```bash
+curl -s http://localhost:8000/health | jq
+```
+
+```bash
+curl -s -X POST http://localhost:8000/triagem \
+  -H "Content-Type: application/json" \
+  -d '{"mensagem":"Preciso de ajuda com boleto"}' | jq
+```
+
+```bash
+curl -s -X POST http://localhost:8000/executar \
+  -H "Content-Type: application/json" \
+  -d '{"comando":"ls -la"}' | jq
+```
+
+```bash
+curl -s -X POST http://localhost:8000/consultar \
+  -H "Content-Type: application/json" \
+  -d '{"pergunta":"Como emitir boleto?"}' | jq
+```
+
+```bash
+curl -s http://localhost:8000/fila | jq
+```
+
+Documentação detalhada: `docs/api_usage.md`.
+
+## 🔌 Servidor MCP (ferramentas seguras)
+
+Servidor MCP em **stdio** com ferramentas:
+- `listar_diretorio`
+- `ler_arquivo`
+- `executar_comando_seguro`
+- `triagem_porteiro`
+
+### Quickstart
+
+```bash
+python -m mcp_server.server
+```
+
+### Exemplo de registro em host MCP
+
+```json
+{
+  "mcpServers": {
+    "porteiro-mcp": {
+      "command": "python",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "/caminho/para/projeto_ia_agentica"
+    }
+  }
+}
+```
+
+Configurações completas: `mcp_server/config_exemplos.md`.
+
+Guia conceitual: `docs/mcp.md`.
 
 ## Métricas
 
